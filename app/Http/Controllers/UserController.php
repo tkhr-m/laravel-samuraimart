@@ -86,4 +86,19 @@ class UserController extends Controller
     {
         return view('users.edit_password');
     }
+
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->deleted_flag) {
+            $user->deleted_flag = false;
+        } else {
+            $user->deleted_flag = true;
+        }
+        $user->update();
+
+        Auth::logout();
+        return redirect('/');
+    }
 }
