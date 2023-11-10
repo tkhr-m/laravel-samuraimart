@@ -42,7 +42,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        if($user->deleted_flag) {
+        if ($user->deleted_flag) {
             Auth::logout();
             return redirect()->route('login')->with('warning', '退会済みのアカウントです。');
         }

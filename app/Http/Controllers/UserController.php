@@ -91,11 +91,8 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->deleted_flag) {
-            $user->deleted_flag = false;
-        } else {
-            $user->deleted_flag = true;
-        }
+        $user->deleted_flag = !$user->deleted_flag;
+
         $user->update();
 
         Auth::logout();
