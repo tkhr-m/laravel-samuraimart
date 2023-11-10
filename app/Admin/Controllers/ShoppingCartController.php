@@ -40,7 +40,7 @@ class ShoppingCartController extends AdminController
             $filter->between('created_at', '登録日')->datetime();
         });
 
-        $grid->diableCreateButton();
+        $grid->disableCreateButton();
         $grid->actions(function ($actions) {
             $actions->disableDelete();
             $actions->disableEdit();

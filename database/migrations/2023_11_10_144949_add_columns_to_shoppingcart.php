@@ -28,7 +28,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('shoppingcart', function (Blueprint $table) {
-            //
+            // nothing to do
         });
     }
 };
