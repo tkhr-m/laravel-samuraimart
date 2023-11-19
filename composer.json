@@ -15,7 +15,8 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
-        "overtrue/laravel-favorite": "^5.1"
+        "overtrue/laravel-favorite": "^5.1",
+        "payjp/payjp-php": "^1.5"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9",

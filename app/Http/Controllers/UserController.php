@@ -139,4 +139,55 @@ class UserController extends Controller
 
         return view('users.cart_history_show', compact('cart_contents', 'cart_info'));
     }
+
+    public function register_card(Request $request)
+    {
+        $user = Auth::user();
+
+        $pay_jp_secret = env('PAYJP_SECRET_KEY');
+        \Payjp\Payjp::setApiKey($pay_jp_secret);
+
+        $card = [];
+        $count = 0;
+
+        if ($user->token != "") {
+            $result = \Payjp\Customer::retrieve($user->token)->cards->all(array("limit" => 1))->data[0];
+            $count = \Payjp\Customer::retrieve($user->token)->cards->all()->count;
+
+            $card = [
+                'brand' => $result["exp_mont"],
+                'exp_month' => $result["exp_month"],
+                'exp_year' => $result["exp_year"],
+                'last4' => $result["last4"]
+            ];
+        }
+
+        return view('users.register_card', compact('card', 'count'));
+    }
+
+    public function token(Request $request)
+    {
+        $pay_jp_secret = env('PAYJP_SECRET_KEY');
+        \Payjp\Payjp::setApiKey($pay_jp_secret);
+
+        $user = Auth::user();
+        $customer = $user->token;
+
+        if ($customer != "") {
+            $cu = \Payjp\Customer::retrieve($customer);
+            $delete_card = $cu->cards->retrieve($cu->cards->data[0]["id"]);
+            $delete_card->delete();
+            $cu->cards->create(array(
+                "card" => request('payjp-token')
+            ));
+        } else {
+            $cu = \Payjp\Customer::create(array(
+                "card" => request('payjp-token')
+            ));
+            $user->token = $cu->id;
+            $user->update();
+        }
+
+        return to_route('mypage');
+    }
 }
